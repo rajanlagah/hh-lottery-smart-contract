@@ -53,7 +53,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     event RaffleEnter(address indexed player);
     event RequestedRaffleWinner(uint256 indexed requestId);
-    event WinnersList(address indexed winnerAddress);
+    event WinnersPicked(address indexed winnerAddress);
 
     constructor(
         address vrfCordinatorV2,
@@ -99,7 +99,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         if (!success) {
             revert Raffle__WithdrawalFail();
         }
-        emit WinnersList(winner);
+        emit WinnersPicked(winner);
     }
 
     /**

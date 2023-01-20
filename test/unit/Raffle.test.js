@@ -102,4 +102,97 @@ const {
           assert(upkeepNeeded)
         })
       })
+      describe("preformUpKeep", () => {
+        it("run when checkUpKeep returns true", async () => {
+          await raffle.enterRaffle({ value: entryFee })
+          await network.provider.send("evm_increaseTime", [
+            interval.toNumber() + 1,
+          ])
+          await network.provider.request({ method: "evm_mine", params: [] })
+          const tx = await raffle.performUpkeep([])
+          assert(tx)
+        })
+        it("reverts when checkUpKeep is false", async () => {
+          await expect(raffle.performUpkeep([])).to.be.revertedWith(
+            "Raffle__UpkeepNotNeeded"
+          )
+        })
+        it("update raffle state, emit event", async () => {
+          await raffle.enterRaffle({ value: entryFee })
+          await network.provider.send("evm_increaseTime", [
+            interval.toNumber() + 1,
+          ])
+          await network.provider.request({ method: "evm_mine", params: [] })
+          const txResponse = await raffle.performUpkeep([])
+          const txReceipt = await txResponse.wait(1)
+          const reqId = await txReceipt.events[1].args.requestId // 0 event is emited by vrf contract
+          const raffleState = await raffle.getRaffleState()
+          assert(reqId.toNumber() > 0)
+          assert(raffleState.toString() == "1")
+        })
+      })
+      describe("fulfillRandomWords", () => {
+        beforeEach(async () => {
+          await raffle.enterRaffle({ value: entryFee })
+          await network.provider.send("evm_increaseTime", [
+            interval.toNumber() + 1,
+          ])
+          await network.provider.request({ method: "evm_mine", params: [] })
+        })
+
+        it("can only be called after performUpkeep", async () => {
+          await expect(
+            vrfCoordinatorV2Mock.fulfillRandomWords(0, raffle.address)
+          ).to.be.revertedWith("nonexistent request")
+        })
+
+        it("picks a winner, resets the lottery, transfer money", async () => {
+          const totalNumOfAccounts = 3
+          const otherIndexs = 1 // 0 is for deployer
+          const accounts = ethers.getSigner()
+          for (let i = otherIndexs; i < totalNumOfAccounts; i++) {
+            const connectedRaffleAcc = raffle.connect(accounts[i])
+            await connectedRaffleAcc.enterRaffle({ value: entryFee })
+          }
+          const startTimeStamp = raffle.getLastTimeStamp()
+          const winnerStartingBalance = await accounts[2].getBalance()
+          // performUpKeep ( mock being chainlink keepers)
+          // fulfillrandomnumber ( mock being the chainlink VRF)
+          // We have to wait fulfillrandomnumber to be called
+          await new Promise(async (resolve, reject) => {
+            // setting up listners
+            raffle.once("WinnersPicked", async () => {
+              console.log("found the event")
+              try {
+                const recentWinner = await raffle.getWinner()
+                const raffleState = await raffle.getRaffleState()
+                const endingTimeStamp = await raffle.getLastTimeStamp()
+                const numberOfPlayers = await raffle.getNumberOfPlayers()
+                const winnerEndingBalance = await accounts[2].getBalance()
+                // contract should be reset
+                assert.equal(numberOfPlayers.toString(), "0")
+                assert.equal(raffleState.toString(), "0")
+                assert(endingTimeStamp > startTimeStamp)
+
+                assert.equal(
+                  winnerEndingBalance.toString(),
+                  winnerStartingBalance.add(
+                    entryFee.mul(totalNumOfAccounts).toString()
+                  )
+                )
+                resolve()
+              } catch (e) {
+                reject(e)
+              }
+            })
+            // triggering the functions
+            const tx = await raffle.performUpkeep([])
+            const transactionReceipt = await tx.wait(1)
+            await vrfCoordinatorV2Mock.fulfillRandomWords(
+              transactionReceipt.events[1].requestId,
+              raffle.address
+            )
+          })
+        })
+      })
     })
