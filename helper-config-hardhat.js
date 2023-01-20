@@ -18,6 +18,7 @@ const networkConfig = {
     entrenceFee: ethers.utils.parseEther("0.01"),
     callBackGasLimit: "500000",
     interval: "30",
+    subId: "0",
   },
 }
 const developmentChains = ["hardhat", "localhost"]

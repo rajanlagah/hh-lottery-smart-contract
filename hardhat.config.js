@@ -27,6 +27,12 @@ module.exports = {
       accounts: [GORELI_ACCOUNT_META_MASK],
     },
   },
+  gasReporter: {
+    enabled: false,
+    currency: "USD",
+    outputFile: "gas-report.txt",
+    noColors: true,
+  },
   namedAccounts: {
     deployer: {
       default: 0,
