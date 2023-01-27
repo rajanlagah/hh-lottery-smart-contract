@@ -13,7 +13,6 @@ const GORELI_ACCOUNT_META_MASK = process.env.GORELI_ACCOUNT_META_MASK
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.17",
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
@@ -41,7 +40,33 @@ module.exports = {
       default: 1,
     },
   },
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.7",
+      },
+      {
+        version: "0.4.24",
+      },
+    ],
+  },
   mocha: {
-    timeout: 200000, // 200 sec
+    timeout: 1000000, // 1000 sec
+  },
+  etherscan: {
+    // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
+    apiKey: {
+      goerli: ETHER_SCAN_API_KEY,
+    },
+    customChains: [
+      {
+        network: "goerli",
+        chainId: 5,
+        urls: {
+          apiURL: "https://api-goerli.etherscan.io/api",
+          browserURL: "https://goerli.etherscan.io",
+        },
+      },
+    ],
   },
 }

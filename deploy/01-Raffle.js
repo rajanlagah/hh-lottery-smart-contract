@@ -25,10 +25,11 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     // free on local.
     await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, SUB_FUND_AMOUNT)
   } else {
-    vrfCoordinatorV2Address = networkConfig[chainId].vrfCordinatorV2
+    vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
     subscriptionId = networkConfig[chainId].subId
   }
-
+  console.log("subscriptionId", subscriptionId.toNumber())
+  console.log("vrfCoordinatorV2Address", vrfCoordinatorV2Address)
   const entrenceFee = networkConfig[chainId].entrenceFee
   const gasLane = networkConfig[chainId].gasLane
   const callBackGasLimit = networkConfig[chainId].callBackGasLimit
@@ -48,6 +49,16 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   })
+
+  // Ensure the Raffle contract is a valid consumer of the VRFCoordinatorV2Mock contract.
+  if (developmentChains.includes(network.name)) {
+    console.log("adding consumer")
+    const vrfCoordinatorV2Mock = await ethers.getContract(
+      "VRFCoordinatorV2Mock"
+    )
+    await vrfCoordinatorV2Mock.addConsumer(subscriptionId, raffle.address)
+  }
+
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHER_SCAN_API_KEY

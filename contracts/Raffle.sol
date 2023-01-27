@@ -11,11 +11,12 @@
 */
 
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
+pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
+import "hardhat/console.sol";
 
 error Raffle__NotEnoughEthEntered();
 error Raffle__WithdrawalFail();
@@ -121,12 +122,14 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         override
         returns (bool upkeepNeeded, bytes memory /* performData */)
     {
+        console.log("check up keep called");
         bool isOpen = s_raffleState == RaffleState.OPEN;
         bool isIntervalOver = (block.timestamp - s_timeOfLastReset) >
             i_interval;
         bool hasPlayers = s_players.length > 0;
         bool hasBalance = address(this).balance > 0;
         upkeepNeeded = isOpen && isIntervalOver && hasPlayers && hasBalance;
+        return (upkeepNeeded, "0x0");
     }
 
     function performUpkeep(bytes calldata /* performData */) external override {

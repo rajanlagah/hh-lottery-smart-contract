@@ -55,7 +55,7 @@ const {
             interval.toNumber() + 1,
           ])
           await network.provider.request({ method: "evm_mine", params: [] })
-          await raffle.performUpkeep([])
+          await raffle.performUpkeep("0x")
           await expect(
             raffle.enterRaffle({ value: entryFee })
           ).to.be.revertedWith("Raffle__NotOpen")
@@ -149,6 +149,7 @@ const {
         it("picks a winner, resets the lottery, transfer money", async () => {
           const totalNumOfAccounts = 3
           const otherIndexs = 1 // 0 is for deployer
+          // await network.provider.send("eth_requestAccounts", [])
           const accounts = ethers.getSigner()
           for (let i = otherIndexs; i < totalNumOfAccounts; i++) {
             const connectedRaffleAcc = raffle.connect(accounts[i])
@@ -161,7 +162,7 @@ const {
           // We have to wait fulfillrandomnumber to be called
           await new Promise(async (resolve, reject) => {
             // setting up listners
-            raffle.once("WinnersPicked", async () => {
+            raffle.once("WinnerPicked", async () => {
               console.log("found the event")
               try {
                 const recentWinner = await raffle.getWinner()
@@ -186,7 +187,7 @@ const {
               }
             })
             // triggering the functions
-            const tx = await raffle.performUpkeep([])
+            const tx = await raffle.performUpkeep("0x")
             const transactionReceipt = await tx.wait(1)
             await vrfCoordinatorV2Mock.fulfillRandomWords(
               transactionReceipt.events[1].requestId,
