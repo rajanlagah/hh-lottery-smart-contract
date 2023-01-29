@@ -17,7 +17,7 @@ developmentChains.includes(network.name)
         raffle = await ethers.getContract("Raffle", deployer)
         // raffle = await ethers.getContractAt(
         //   "Raffle",
-        //   "0xB8Dd37Fb562c8e39F373647047362898c3F24305",
+        //   "0xFB641C753c6F11B9F002541Fa93A71CB5579DF60",
         //   "0x6e0F5B57FEdc8911722c92dcD5D7D0cf69ceA385"
         // )
         entryFee = await raffle.getEntryFee()
@@ -73,6 +73,7 @@ developmentChains.includes(network.name)
       describe("fulfillRandomWords", function () {
         it("works with live Chainlink Keepers and Chainlink VRF, we get a random winner", async function () {
           // enter the raffle
+          console.log("address", raffle)
           console.log("Setting up test...")
           const startingTimeStamp = await raffle.getLastTimeStamp()
           const accounts = await ethers.getSigners()
@@ -81,17 +82,12 @@ developmentChains.includes(network.name)
           console.log("Setting up Listener...")
           console.log("Raffle", raffle.address)
           console.log("winnerStartingBalance", winnerStartingBalance.toString())
-          // Then entering the raffle
-          console.log("Entering Raffle...")
-          const tx = await raffle.enterRaffle({ value: entryFee })
-          await tx.wait(1)
-          console.log("Ok, time to wait...")
           // and this code WONT complete until our listener has finished listening!
 
           await new Promise(async (resolve, reject) => {
             // setup listener before we enter the raffle
             // Just in case the blockchain moves REALLY fast
-            raffle.once("WinnerPicked", async () => {
+            raffle.once("WinnersPicked", async () => {
               console.log("WinnerPicked event fired!")
               try {
                 // add our asserts here
@@ -114,6 +110,16 @@ developmentChains.includes(network.name)
                 reject(error)
               }
             })
+            // Then entering the raffle
+            try {
+              console.log("Entering Raffle...")
+              const tx = await raffle.enterRaffle({ value: entryFee })
+              console.log("Waiting for block confirmation")
+              await tx.wait(1)
+              console.log("Ok, time to wait...")
+            } catch (e) {
+              console.log("rerr", e)
+            }
           })
         })
       })

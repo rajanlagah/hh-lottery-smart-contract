@@ -28,7 +28,6 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
     subscriptionId = networkConfig[chainId].subId
   }
-  console.log("subscriptionId", subscriptionId.toNumber())
   console.log("vrfCoordinatorV2Address", vrfCoordinatorV2Address)
   const entrenceFee = networkConfig[chainId].entrenceFee
   const gasLane = networkConfig[chainId].gasLane
