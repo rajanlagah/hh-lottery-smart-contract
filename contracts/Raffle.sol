@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /**
  * tasks
  * - Enter in lottery ( make some payment )
@@ -7,7 +8,7 @@
 /*
     Chainlink oracle
     1. For Randomness
-    2. For Automated execution 
+    2. For Automated execution
 */
 
 // SPDX-License-Identifier: MIT
@@ -42,15 +43,21 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     uint256 private immutable i_entryFee;
     address payable[] private s_players;
     VRFCoordinatorV2Interface private immutable i_vrfCordinator;
-    bytes32 private immutable i_gasLane; // each gasLane have max gas limit to protect us paying tons of money
+
     uint64 private immutable i_subscriptionId;
+    bytes32 private immutable i_gasLane; // each gasLane have max gas limit to protect us paying tons of money
+    address private immutable i_subscrvrfCordinatorV2_add;
     uint32 private immutable i_callbackGasLimit;
     uint16 private constant RANDOM_REQUEST_NUMBER_CONFIRMATION = 3;
     uint32 private constant RANDOM_NUMBER = 1;
-    address payable private s_winner;
+
+    address private s_winner;
     RaffleState private s_raffleState;
     uint256 public immutable i_interval;
     uint256 public s_timeOfLastReset;
+
+    event Log(string message);
+    event LogBytes(string data);
 
     event RaffleEnter(address indexed player);
     event RequestedRaffleWinner(uint256 indexed requestId);
@@ -64,14 +71,15 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         uint32 callbackGasLimit,
         uint256 interval
     ) VRFConsumerBaseV2(vrfCordinatorV2) {
-        i_entryFee = entryFee;
         i_vrfCordinator = VRFCoordinatorV2Interface(vrfCordinatorV2);
+        i_subscrvrfCordinatorV2_add = vrfCordinatorV2;
         i_gasLane = gasLane;
-        i_subscriptionId = subscriptionId;
-        i_callbackGasLimit = callbackGasLimit;
-        s_raffleState = RaffleState.OPEN;
         i_interval = interval;
+        i_subscriptionId = subscriptionId;
+        i_entryFee = entryFee;
+        s_raffleState = RaffleState.OPEN;
         s_timeOfLastReset = block.timestamp;
+        i_callbackGasLimit = callbackGasLimit;
     }
 
     function enterRaffle() public payable {
@@ -124,11 +132,11 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
     {
         console.log("check up keep called");
         bool isOpen = s_raffleState == RaffleState.OPEN;
-        bool isIntervalOver = (block.timestamp - s_timeOfLastReset) >
-            i_interval;
+        bool isIntervalOver = ((block.timestamp - s_timeOfLastReset) >
+            i_interval);
         bool hasPlayers = s_players.length > 0;
         bool hasBalance = address(this).balance > 0;
-        upkeepNeeded = isOpen && isIntervalOver && hasPlayers && hasBalance;
+        upkeepNeeded = (isOpen && isIntervalOver && hasPlayers && hasBalance);
         return (upkeepNeeded, "0x0");
     }
 
@@ -143,17 +151,54 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         }
 
         s_raffleState = RaffleState.CALCULATING;
-        uint256 requestId = i_vrfCordinator.requestRandomWords(
-            i_gasLane,
-            i_subscriptionId,
-            RANDOM_REQUEST_NUMBER_CONFIRMATION,
-            i_callbackGasLimit,
-            RANDOM_NUMBER
-        );
-        emit RequestedRaffleWinner(requestId);
+        console.log("calling random words");
+        try
+            i_vrfCordinator.requestRandomWords(
+                i_gasLane,
+                i_subscriptionId,
+                RANDOM_REQUEST_NUMBER_CONFIRMATION,
+                i_callbackGasLimit,
+                RANDOM_NUMBER
+            )
+        {} catch Error(string memory reason) {
+            // catch failing revert() and require()
+            console.log("Err");
+            console.log(reason);
+            emit Log(reason);
+        } catch (bytes memory reason) {
+            // catch failing assert()
+            console.log("Exception");
+            string memory strReason = string(abi.encode(reason));
+            emit LogBytes(strReason);
+        }
+        // emit RequestedRaffleWinner(requestId);
     }
 
     /* View / Pure functions */
+    function getConfig()
+        public
+        view
+        returns (
+            address vrfCordinatorV2,
+            uint256 entryFee,
+            bytes32 gasLane,
+            uint64 subscriptionId,
+            uint32 callbackGasLimit,
+            uint256 interval,
+            VRFCoordinatorV2Interface vf
+        )
+    {
+        return (
+            i_subscrvrfCordinatorV2_add,
+            i_entryFee,
+            i_gasLane,
+            i_subscriptionId,
+            i_callbackGasLimit,
+            i_interval,
+            i_vrfCordinator
+        );
+    }
+
     function getEntryFee() public view returns (uint256) {
         return i_entryFee;
     }
@@ -166,12 +211,12 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         return s_players[_index];
     }
 
-    function getWinner() public view returns (address payable) {
+    function getWinner() public view returns (address) {
         return s_winner;
     }
 
-    function getRaffleState() public view returns (uint256) {
-        return uint256(s_raffleState);
+    function getRaffleState() public view returns (RaffleState) {
+        return s_raffleState;
     }
 
     function getNumberOfPlayers() public view returns (uint256) {

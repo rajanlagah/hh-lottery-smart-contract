@@ -42,11 +42,12 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     callBackGasLimit,
     interval,
   ]
+  console.log(args)
   const raffle = await deploy("Raffle", {
     from: deployer,
     args: args,
     log: true,
-    waitConfirmations: network.config.blockConfirmations || 1,
+    waitConfirmations: 6,
   })
 
   // Ensure the Raffle contract is a valid consumer of the VRFCoordinatorV2Mock contract.
