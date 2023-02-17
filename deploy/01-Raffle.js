@@ -1,5 +1,9 @@
 const { network, ethers } = require("hardhat")
-const { developmentChains, networkConfig } = require("../helper-config-hardhat")
+const {
+  developmentChains,
+  networkConfig,
+  VERIFICATION_BLOCK_CONFIRMATIONS,
+} = require("../helper-config-hardhat")
 const { verifyContract } = require("../utils/verify")
 require("dotenv").config()
 
@@ -42,20 +46,27 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     callBackGasLimit,
     interval,
   ]
-  console.log(args)
+  console.log("Getting raffle")
+  console.log("args", args)
+  const waitBlockConfirmations = developmentChains.includes(network.name)
+    ? 1
+    : VERIFICATION_BLOCK_CONFIRMATIONS
+
   const raffle = await deploy("Raffle", {
     from: deployer,
     args: args,
     log: true,
-    waitConfirmations: 6,
+    waitConfirmations: waitBlockConfirmations,
   })
 
+  console.log("Got raffle")
   // Ensure the Raffle contract is a valid consumer of the VRFCoordinatorV2Mock contract.
   if (developmentChains.includes(network.name)) {
     console.log("adding consumer")
     const vrfCoordinatorV2Mock = await ethers.getContract(
       "VRFCoordinatorV2Mock"
     )
+    console.log("not verifying")
     await vrfCoordinatorV2Mock.addConsumer(subscriptionId, raffle.address)
   }
 
