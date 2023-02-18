@@ -152,26 +152,26 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
         s_raffleState = RaffleState.CALCULATING;
         console.log("calling random words");
-        try
-            i_vrfCordinator.requestRandomWords(
-                i_gasLane,
-                i_subscriptionId,
-                RANDOM_REQUEST_NUMBER_CONFIRMATION,
-                i_callbackGasLimit,
-                RANDOM_NUMBER
-            )
-        {} catch Error(string memory reason) {
-            // catch failing revert() and require()
-            console.log("Err");
-            console.log(reason);
-            emit Log(reason);
-        } catch (bytes memory reason) {
-            // catch failing assert()
-            console.log("Exception");
-            string memory strReason = string(abi.encode(reason));
-            emit LogBytes(strReason);
-        }
-        // emit RequestedRaffleWinner(requestId);
+        // try
+        uint256 _requestId = i_vrfCordinator.requestRandomWords(
+            i_gasLane,
+            i_subscriptionId,
+            RANDOM_REQUEST_NUMBER_CONFIRMATION,
+            i_callbackGasLimit,
+            RANDOM_NUMBER
+        );
+        // {} catch Error(string memory reason) {
+        //     // catch failing revert() and require()
+        //     console.log("Err");
+        //     console.log(reason);
+        //     emit Log(reason);
+        // } catch (bytes memory reason) {
+        //     // catch failing assert()
+        //     console.log("Exception");
+        //     string memory strReason = string(abi.encode(reason));
+        //     emit LogBytes(strReason);
+        // }
+        emit RequestedRaffleWinner(_requestId);
     }
 
     /* View / Pure functions */
