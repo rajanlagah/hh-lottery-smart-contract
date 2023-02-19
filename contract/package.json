@@ -1,4 +1,6 @@
 {
+  "author": "rajanlagah@gmail.com",
+  "keywords": ["blockchain","solidity","web3","nextjs","react","smart-contract","hardhat","chainlink","vrf","mocha"],
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.2",

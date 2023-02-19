@@ -1,7 +1,9 @@
 {
   "name": "hh-lottery-nextjs",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "author": "rajanlagah@gmail.com",
+  "keywords": ["blockchain","solidity","web3","nextjs","react","smart-contract","hardhat","chainlink","vrf","mocha"],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,6 +12,7 @@
   },
   "dependencies": {
     "@next/font": "13.1.6",
+    "cron-converter": "^2.0.0",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "js-yaml": "^4.1.0",

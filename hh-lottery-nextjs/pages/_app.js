@@ -6,7 +6,9 @@ export default function App({ Component, pageProps }) {
   return (
     <MoralisProvider initializeOnMount={false}>
       <NotificationProvider>
-        <Component {...pageProps} />
+        <div className="bg-gradient-to-r bg-black h-screen text-white">
+          <Component {...pageProps} />
+        </div>
       </NotificationProvider>
     </MoralisProvider>
   );

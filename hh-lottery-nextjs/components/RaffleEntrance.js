@@ -3,10 +3,13 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import { ethers } from "ethers";
 import { contractAddress, abi } from "./../contracts/index";
 import { useNotification } from "web3uikit";
+import { getSchedule, stringToArray } from "cron-converter";
 
 export default function LotteryEntrance() {
   const [entryFee, setEntryfee] = useState("0");
   const [numOfPlayers, setnumOfPlayers] = useState("0");
+  const [nextScheduleResults, setnextScheduleResults] = useState("0");
+  const interval = 60; // every x sec
   const [lastWinner, setlastWinner] = useState("0");
   const { chainId: chainIdHex, isWeb3Enabled } = useMoralis();
   const chainId = parseInt(chainIdHex);
@@ -38,11 +41,25 @@ export default function LotteryEntrance() {
     functionName: "getNumberOfPlayers",
     params: {},
   });
+
   const { runContractFunction: getWinner } = useWeb3Contract({
     abi,
     contractAddress: contractAddress?.[chainId]?.[0] || null,
     functionName: "getWinner",
     params: {},
+  });
+
+  useEffect(() => {
+    const arr = stringToArray("*/1 * * * *");
+
+    // Get the iterator, initialised to now
+    let schedule = getSchedule(arr);
+    // let reference = new Date(2013, 2, 8, 9, 32);
+    // const schedule = getSchedule(arr, reference, "Europe/London");
+    const nextScheduled = schedule.next().c;
+    setnextScheduleResults(
+      `${nextScheduled.hour}h : ${nextScheduled.minute}m : ${nextScheduled.second}s`
+    );
   });
 
   useEffect(() => {
@@ -79,16 +96,39 @@ export default function LotteryEntrance() {
     }
   };
 
+  const entryFeeInEth = ethers.utils.formatUnits(entryFee.toString(), "ether");
+  const totalReward = parseInt(numOfPlayers) * parseFloat(entryFeeInEth);
+  var date = new Date();
+  date.setSeconds(interval); // specify value for SECONDS here
+  const timeString = date.toISOString().substring(11, 19);
+
   return (
-    <div className="p-4">
-      <p>
-        Entery fee is {ethers.utils.formatUnits(entryFee.toString(), "ether")}{" "}
-        ETH
+    <div className="p-4 text-center">
+      <p className="absolute bottom-2 left-2 lottery-time">
+        Next Results at{" "}
+        <span className="px-4 text-white">{nextScheduleResults}</span>
       </p>
-      <p>Number of players : {numOfPlayers}</p>
-      <p>Last Winner : {lastWinner}</p>
+      <div className="total-reward">
+        <p>
+          {totalReward}
+          <span className="currency-eth">ETH</span>
+        </p>
+      </div>
+      <br />
+      <br />
+      <div className="flex justify-center ">
+        <div className="lottery-info-tab">Fee {entryFeeInEth} ETH</div>
+        <div className="lottery-info-tab">
+          Number of players : {numOfPlayers}
+        </div>
+        <div className="lottery-info-tab cursor-pointer hover:underline">
+          Last Winner : {lastWinner.substring(0, 6)} ... {lastWinner.slice(-6)}
+        </div>
+      </div>
+      <br />
+      <br />
       <button
-        className="py-2 px-4 rounded bg-blue-600 hover:bg-slate-700 text-white"
+        className="py-2 px-4 rounded bg-white hover:p-2 text-black"
         onClick={() => {
           enterRaffle({
             onSuccess: handleSuccess,
