@@ -13,7 +13,11 @@ export default function LotteryEntrance() {
   const dispatch = useNotification();
 
   console.log("Chain ID", chainId);
-  const { runContractFunction: enterRaffle } = useWeb3Contract({
+  const {
+    runContractFunction: enterRaffle,
+    isLoading,
+    isFetching,
+  } = useWeb3Contract({
     abi,
     contractAddress: contractAddress?.[chainId]?.[0] || null,
     functionName: "enterRaffle",
@@ -68,13 +72,15 @@ export default function LotteryEntrance() {
         title: "Success",
         position: "topR",
       });
+      const _numOfPlayers = await getNumberOfPlayers();
+      setnumOfPlayers(_numOfPlayers.toString());
     } catch (e) {
       console.log("Err", e);
     }
   };
 
   return (
-    <>
+    <div className="p-4">
       <p>
         Entery fee is {ethers.utils.formatUnits(entryFee.toString(), "ether")}{" "}
         ETH
@@ -82,6 +88,7 @@ export default function LotteryEntrance() {
       <p>Number of players : {numOfPlayers}</p>
       <p>Last Winner : {lastWinner}</p>
       <button
+        className="py-2 px-4 rounded bg-blue-600 hover:bg-slate-700 text-white"
         onClick={() => {
           enterRaffle({
             onSuccess: handleSuccess,
@@ -89,8 +96,14 @@ export default function LotteryEntrance() {
           });
         }}
       >
-        Enter Raffle
+        {isLoading || isFetching ? (
+          <div className="flex justify-evenly align-middle px-6">
+            <div className="border-t-transparent border-solid animate-spin rounded-full border-2 h-4 w-4 p-2 mx-2"></div>
+          </div>
+        ) : (
+          <div>Enter Raffle</div>
+        )}
       </button>
-    </>
+    </div>
   );
 }
