@@ -1,6 +1,6 @@
 ## Decentralized Lottery
-[demo](https://tiny-dew-2052.on.fleek.co/)
-
+Check [demo](https://tiny-dew-2052.on.fleek.co/)
+Check this tutorial [here](https://www.youtube.com/watch?v=gyMwXuJrbJQ&t=63378s&ab_channel=freeCodeCamp.org)
 ## Testnet
 Goerli.
 
@@ -15,7 +15,6 @@ Goerli.
 - react-moralis
 - web3uikit
 - fleek.com
-
 ## How it work
 This project have 3 components 
 1. Smart contract
