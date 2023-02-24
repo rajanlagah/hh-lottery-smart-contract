@@ -15,7 +15,6 @@ export default function LotteryEntrance() {
   const chainId = parseInt(chainIdHex);
   const dispatch = useNotification();
 
-  console.log("Chain ID", chainId);
   const {
     runContractFunction: enterRaffle,
     isLoading,
@@ -104,9 +103,23 @@ export default function LotteryEntrance() {
 
   return (
     <div className="p-4 text-center">
-      <p className="absolute bottom-2 left-2 lottery-time">
-        Next Results at{" "}
-        <span className="px-4 text-white">{nextScheduleResults}</span>
+      <p className="absolute hover:underline bottom-2 left-2 lottery-time">
+        <a target="_blank" href="https://rajanlagah.netlify.app/">
+          About me
+        </a>
+      </p>
+      <p className="absolute bottom-4 right-4 lottery-time">
+        <a
+          href="https://github.com/rajanlagah/hh-lottery-smart-contract"
+          target="_blank"
+        >
+          <img
+            width="50px"
+            height="50px"
+            src="./github.svg"
+            alt="github icon"
+          />
+        </a>
       </p>
       <div className="total-reward">
         <p>
@@ -116,7 +129,7 @@ export default function LotteryEntrance() {
       </div>
       <br />
       <br />
-      <div className="flex justify-center ">
+      <div className="flex md:justify-center flex-wrap ">
         <div className="lottery-info-tab">Fee {entryFeeInEth} ETH</div>
         <div className="lottery-info-tab">
           Number of players : {numOfPlayers}
@@ -125,25 +138,40 @@ export default function LotteryEntrance() {
           Last Winner : {lastWinner.substring(0, 6)} ... {lastWinner.slice(-6)}
         </div>
       </div>
-      <br />
-      <br />
-      <button
-        className="py-2 px-4 rounded bg-white hover:p-2 text-black"
-        onClick={() => {
-          enterRaffle({
-            onSuccess: handleSuccess,
-            onError: (e) => console.log("er", e),
-          });
-        }}
-      >
-        {isLoading || isFetching ? (
-          <div className="flex justify-evenly align-middle px-6">
-            <div className="border-t-transparent border-solid animate-spin rounded-full border-2 h-4 w-4 p-2 mx-2"></div>
-          </div>
-        ) : (
-          <div>Enter Raffle</div>
-        )}
-      </button>
+      {chainId != 5 && (
+        <a
+          target="_blank"
+          href="https://metaschool.so/articles/how-to-change-add-new-network-metamask-wallet/"
+          className="text-white underline"
+        >
+          Please switch to Goerli testnet
+        </a>
+      )}
+      {chainId == 5 && (
+        <div className="md:my-8 my-6">
+          <button
+            className="py-2 px-4 rounded bg-white hover:p-2 text-black"
+            onClick={() => {
+              enterRaffle({
+                onSuccess: handleSuccess,
+                onError: (e) => console.log("er", e),
+              });
+            }}
+          >
+            {isLoading || isFetching ? (
+              <div className="flex justify-evenly align-middle px-6">
+                <div className="border-t-transparent border-solid animate-spin rounded-full border-2 h-4 w-4 p-2 mx-2"></div>
+              </div>
+            ) : (
+              <div>Enter Raffle</div>
+            )}
+          </button>
+          <p className="p-4 lottery-time">
+            Next Results at{" "}
+            <span className="px-2 text-white">{nextScheduleResults}</span>
+          </p>
+        </div>
+      )}
     </div>
   );
 }

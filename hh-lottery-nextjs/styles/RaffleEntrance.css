@@ -49,6 +49,36 @@
     padding: 0 25px;
     
 }
+
+@media only screen and (max-width: 640px) {
+    .lottery-info-tab{
+        font-size: 1rem;
+        word-spacing: 2px;
+        width: 100%;
+        text-align: left;
+        letter-spacing: 1px;
+        border: 0;
+        /* border-top: 1px solid #fff; */
+        padding: 5px 5px;
+    }    
+    .total-reward{
+        font-size: 15rem;
+        font-weight: 200;
+        z-index: 1;
+        height: 250px;
+        max-width: 250px;
+        margin: auto;
+        pointer-events:none;    
+    }
+    .total-reward::after{
+        letter-spacing: 5px;
+        word-spacing: 10px;
+        font-size: 2rem;
+        color: #999;
+        content: 'Reward of';
+    }
+    
+}
 .lottery-info-tab:last-child{
     border-right: 0;
 }
