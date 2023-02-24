@@ -104,12 +104,17 @@ export default function LotteryEntrance() {
   return (
     <div className="p-4 text-center">
       <p className="absolute hover:underline bottom-2 left-2 lottery-time">
-        <a target="_blank" href="https://rajanlagah.netlify.app/">
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://rajanlagah.netlify.app/"
+        >
           About me
         </a>
       </p>
       <p className="absolute bottom-4 right-4 lottery-time">
         <a
+          rel="noreferrer"
           href="https://github.com/rajanlagah/hh-lottery-smart-contract"
           target="_blank"
         >
@@ -140,6 +145,7 @@ export default function LotteryEntrance() {
       </div>
       {chainId != 5 && (
         <a
+          rel="noreferrer"
           target="_blank"
           href="https://metaschool.so/articles/how-to-change-add-new-network-metamask-wallet/"
           className="text-white underline"
