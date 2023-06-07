@@ -1,4 +1,4 @@
-const { ethers } = require("hardhat")
+const { ethers } = require("hardhat");
 
 const networkConfig = {
   5: {
@@ -9,32 +9,43 @@ const networkConfig = {
       "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
     subId: "8885",
     callBackGasLimit: "2500000",
-    interval: "30",
+    interval: "30"
+  },
+  11155111: {
+    name: "sepolia",
+    vrfCoordinatorV2: "0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625", // https://sepolia.etherscan.io/address/0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625/
+    entrenceFee: ethers.utils.parseEther("0.01"),
+    gasLane:
+      "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15", // https://docs.chain.link/getting-started/intermediates-tutorial#contract-variables
+    subId: "8885",
+    callBackGasLimit: "2500000",
+    interval: "30"
   },
   31337: {
     name: "localhost",
     gasLane:
-      "0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc",
+      "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
     entrenceFee: ethers.utils.parseEther("0.01"),
     callBackGasLimit: "2500000",
     interval: "30",
-    subId: "8885",
+    subId: "8885"
   },
   1: {
     name: "mainnet",
-    keepersUpdateInterval: "30",
-  },
-}
-const developmentChains = ["hardhat", "localhost"]
-const VERIFICATION_BLOCK_CONFIRMATIONS = 6
+    keepersUpdateInterval: "30"
+  }
+};
+const developmentChains = ["hardhat", "localhost"];
+const VERIFICATION_BLOCK_CONFIRMATIONS = 6;
 const frontEndContractsFile =
-  "../nextjs-smartcontract-lottery-fcc/constants/contractAddresses.json"
-const frontEndAbiFile = "../nextjs-smartcontract-lottery-fcc/constants/abi.json"
+  "../nextjs-smartcontract-lottery-fcc/constants/contractAddresses.json";
+const frontEndAbiFile =
+  "../nextjs-smartcontract-lottery-fcc/constants/abi.json";
 
 module.exports = {
   networkConfig,
   developmentChains,
   VERIFICATION_BLOCK_CONFIRMATIONS,
   frontEndContractsFile,
-  frontEndAbiFile,
-}
+  frontEndAbiFile
+};

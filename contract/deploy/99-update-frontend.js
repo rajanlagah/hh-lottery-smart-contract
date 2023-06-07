@@ -44,4 +44,4 @@ async function updateContractAddress() {
   fs.writeFileSync(FRONT_END_CONTRACT_FILE, JSON.stringify(currentAddresses));
 }
 
-module.exports.tags = ["all", "frontend"];
+module.exports.tags = ["frontend"];

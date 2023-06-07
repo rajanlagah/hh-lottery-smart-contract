@@ -66,9 +66,15 @@ export default function LotteryEntrance() {
       const _entryFee = await getEntryFee();
       const _numOfPlayers = await getNumberOfPlayers();
       const _lastWinner = await getWinner();
-      setlastWinner(_lastWinner);
-      setnumOfPlayers(_numOfPlayers.toString());
-      setEntryfee(_entryFee);
+      if(_lastWinner){
+        setlastWinner(_lastWinner);
+      }
+      if(_numOfPlayers){
+        setnumOfPlayers(_numOfPlayers.toString());
+      }
+      if(_entryFee){
+        setEntryfee(_entryFee);
+      }
     };
     if (isWeb3Enabled) {
       updateUI();
@@ -143,14 +149,14 @@ export default function LotteryEntrance() {
           Last Winner : {lastWinner.substring(0, 6)} ... {lastWinner.slice(-6)}
         </div>
       </div>
-      {chainId != 5 && (
+      {chainId != 11155111 && (
         <a
           rel="noreferrer"
           target="_blank"
           href="https://metaschool.so/articles/how-to-change-add-new-network-metamask-wallet/"
           className="text-white underline"
         >
-          Please switch to Goerli testnet
+          Please switch to Sepolia testnet
         </a>
       )}
       {chainId == 5 && (
