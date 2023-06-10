@@ -78,3 +78,9 @@ to run test
 ```
 hh test --network network-name
 ```
+
+### Deploy 
+
+```
+yarn hardhat deploy --network sepolia
+```

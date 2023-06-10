@@ -159,7 +159,7 @@ export default function LotteryEntrance() {
           Please switch to Sepolia testnet
         </a>
       )}
-      {chainId == 5 && (
+      {chainId == 11155111 && (
         <div className="md:my-8 my-6">
           <button
             className="py-2 px-4 rounded bg-white hover:p-2 text-black"

@@ -17,7 +17,7 @@ const networkConfig = {
     entrenceFee: ethers.utils.parseEther("0.01"),
     gasLane:
       "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15", // https://docs.chain.link/getting-started/intermediates-tutorial#contract-variables
-    subId: "8885",
+    subId: "2633", // for when requesting random numbers
     callBackGasLimit: "2500000",
     interval: "30"
   },
