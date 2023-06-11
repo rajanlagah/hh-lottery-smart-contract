@@ -13,10 +13,10 @@ const networkConfig = {
   },
   11155111: {
     name: "sepolia",
-    vrfCoordinatorV2: "0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625", // https://sepolia.etherscan.io/address/0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625/
+    vrfCoordinatorV2: "0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625", // https://docs.chain.link/vrf/v2/subscription/supported-networks#sepolia-testnet
     entrenceFee: ethers.utils.parseEther("0.01"),
     gasLane:
-      "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15", // https://docs.chain.link/getting-started/intermediates-tutorial#contract-variables
+      "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c", // https://docs.chain.link/vrf/v2/subscription/supported-networks#sepolia-testnet
     subId: "2633", // for when requesting random numbers
     callBackGasLimit: "2500000",
     interval: "30"

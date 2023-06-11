@@ -71,7 +71,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     console.log("Error", error);
   }
 
-  console.log("Got raffle");
+  console.log("Got raffle",raffle.address);
   // Ensure the Raffle contract is a valid consumer of the VRFCoordinatorV2Mock contract.
   if (developmentChains.includes(network.name)) {
     console.log("adding consumer");

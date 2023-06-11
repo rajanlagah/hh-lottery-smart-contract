@@ -6,6 +6,7 @@ const FRONT_END_ABI_FILE = "../hh-lottery-nextjs/contracts/abi.json";
 
 const mainFn = () => {
   console.log("Updating frontend contract and ABI");
+  return
   updateContractAddress();
   updateABI();
 };

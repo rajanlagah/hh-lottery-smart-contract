@@ -49,7 +49,7 @@ export default function LotteryEntrance() {
   });
 
   useEffect(() => {
-    const arr = stringToArray("*/1 * * * *");
+    const arr = stringToArray("*/5 * * * *");
 
     // Get the iterator, initialised to now
     let schedule = getSchedule(arr);

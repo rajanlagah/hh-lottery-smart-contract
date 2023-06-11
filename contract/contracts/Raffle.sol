@@ -82,6 +82,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         i_callbackGasLimit = callbackGasLimit;
     }
 
+
     function enterRaffle() public payable {
         if (msg.value < i_entryFee) {
             revert Raffle__NotEnoughEthEntered();

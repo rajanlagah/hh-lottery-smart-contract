@@ -18,7 +18,8 @@
     border-radius: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    background-image: radial-gradient(rgba(255,255,255,0.12),rgba(255,255,255,0.0001));
+    background-color: #eee;
+    filter: blur(240px);
     content: '';
 }
 
@@ -33,7 +34,7 @@
     letter-spacing: 10px;
     word-spacing: 20px;
     font-size: 3rem;
-    color: #999;
+    color: #eee;
     content: 'Reward of';
 }
 
