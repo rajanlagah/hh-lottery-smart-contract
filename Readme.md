@@ -27,7 +27,7 @@ This project have 3 components
 3. Nextjs frontend
 
 ### Smart Contract
-Its writing in solidity ^0.8. It allow user to make payment in GoerliETH (or hardhat Eth ) and then it store user address and we call them player. After the set time (1 min) it chainlink keepers ( now automation.chainlink ) run cron job and if number of players is > 0 then automation.chainlink will run performUpKeep function which will call random number function given by chainlink's VRF and after process we will receive random number in fulfillRandomWords fn. This random number will be the index of winner in player array and all the balance of contract will be transfered to winner.
+Its writing in solidity ^0.8. It allow user to make payment in GoerliETH (or hardhat Eth ) and then it store user address and we call them player. After the set time (1 hour) it chainlink keepers ( now automation.chainlink ) run cron job and if number of players is > 0 then automation.chainlink will run performUpKeep function which will call random number function given by chainlink's VRF and after process we will receive random number in fulfillRandomWords fn. This random number will be the index of winner in player array and all the balance of contract will be transfered to winner.
 
 ### Smart contract tests
 2 sets of testing
