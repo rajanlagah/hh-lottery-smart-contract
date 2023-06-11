@@ -1,8 +1,13 @@
 ## Decentralized Lottery
 Check [demo](https://tiny-dew-2052.on.fleek.co/)
+
 Check this tutorial [here](https://www.youtube.com/watch?v=gyMwXuJrbJQ&t=63378s&ab_channel=freeCodeCamp.org)
+
+[Contract address](https://sepolia.etherscan.io/address/0x0c88a4e3e3bf9272f15f41de9674277de15ce867)
 ## Testnet
-Goerli.
+
+Sepolia
+Goerli [Depricated]
 
 ## Technology used
 - solidity
