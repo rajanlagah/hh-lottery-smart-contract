@@ -44,7 +44,10 @@ hh test --network network-name
 ```
 
 ### Nextjs frontend
-[demo](https://tiny-dew-2052.on.fleek.co/)
+Sepolia [Demo](https://hh-lottery-smart-contract.vercel.app/)
+
+Gorile[Depricated] [demo](https://tiny-dew-2052.on.fleek.co/)
+
 Intractive UI that make it easy to enter game. We have used react-moralis to intract with smart contract and web3uikit for pre-built UI components.
 
 ### Installation
